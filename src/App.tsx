@@ -44,6 +44,14 @@ export default function App() {
           <div className="star-of-david">✡</div>
           <h1 className="verdict">YOU ARE A JEW</h1>
           <p className="subtext">You always knew it, otherwise why would you take this test?</p>
+          <video
+            className="result-gif"
+            src="https://media.tenor.com/Tm1nNYAa-b8AAAPo/joo-jew.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
           <button className="btn" onClick={handleRestart}>Take the test again</button>
         </div>
       </div>
