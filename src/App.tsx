@@ -1,122 +1,77 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const questions = [
+  { id: 1, text: 'Do you have a bigger nose than most people you know?' },
+  { id: 2, text: 'Do you find yourself haggling even when the price is already fair?' },
+  { id: 3, text: 'Do you have strong opinions about the correct way to make chicken soup?' },
+  { id: 4, text: 'Have you ever felt guilty about spending money on something fun?' },
+  { id: 5, text: 'Do you know at least one lawyer or doctor in your family?' },
+  { id: 6, text: 'Do you check the bill at a restaurant to make sure it adds up correctly?' },
+  { id: 7, text: 'Have you ever loudly complained about a service and then left a tip anyway?' },
+  { id: 8, text: 'Do you believe that education is the most important investment a person can make?' },
+  { id: 9, text: 'Have you ever kept a plastic bag "because it might come in handy"?' },
+  { id: 10, text: 'Do you feel personally responsible for things that are clearly not your fault?' },
+]
+
+type Answer = 'yes' | 'no'
+
+export default function App() {
+  const [current, setCurrent] = useState(0)
+  const [answers, setAnswers] = useState<Answer[]>([])
+  const [done, setDone] = useState(false)
+
+  function handleAnswer(answer: Answer) {
+    const next = [...answers, answer]
+    setAnswers(next)
+    if (current + 1 >= questions.length) {
+      setDone(true)
+    } else {
+      setCurrent(current + 1)
+    }
+  }
+
+  function handleRestart() {
+    setCurrent(0)
+    setAnswers([])
+    setDone(false)
+  }
+
+  if (done) {
+    return (
+      <div className="result-screen">
+        <div className="result-card">
+          <div className="star-of-david">✡</div>
+          <h1 className="verdict">YOU ARE A JEW</h1>
+          <p className="subtext">You always knew it, otherwise why would you take this test?</p>
+          <button className="btn" onClick={handleRestart}>Take the test again</button>
+        </div>
+      </div>
+    )
+  }
+
+  const q = questions[current]
+  const progress = ((current) / questions.length) * 100
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="quiz-screen">
+      <div className="quiz-card">
+        <div className="header">
+          <h2 className="title">Am I a Jew?</h2>
+          <span className="counter-label">{current + 1} / {questions.length}</span>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        <div className="progress-bar">
+          <div className="progress-fill" style={{ width: `${progress}%` }} />
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        <p className="question">{q.text}</p>
+
+        <div className="btn-group">
+          <button className="btn btn-yes" onClick={() => handleAnswer('yes')}>Yes</button>
+          <button className="btn btn-no" onClick={() => handleAnswer('no')}>No</button>
+        </div>
+      </div>
+    </div>
   )
 }
-
-export default App
